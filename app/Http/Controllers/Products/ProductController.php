@@ -35,10 +35,8 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $product = Product::create($request->validated());
-        return back()->with(['success' => 'Product created successfully!', 'product' => $product]);
-
-
-        // return Inertia::render('products/Index')->with('success', 'Product created successfully.');
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully!');
     }
 
     /**

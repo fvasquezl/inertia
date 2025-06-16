@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // Components
-import HeadingSmall from '@/components/HeadingSmall.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,6 +26,7 @@ const form = useForm({
     description: '',
     price: '',
 });
+const open = ref(false);
 
 const createProduct = (e: Event) => {
     e.preventDefault();
@@ -49,7 +49,9 @@ const createProduct = (e: Event) => {
 
 };
 
+
 const closeModal = () => {
+    open.value = false; // 2. Cierra el modal
     form.clearErrors();
     form.reset();
 };
@@ -57,9 +59,9 @@ const closeModal = () => {
 
 <template>
     <div class="space-y-6">
-        <Dialog>
+        <Dialog v-model:open="open">
             <DialogTrigger as-child>
-                <Button variant="default">Create Product</Button>
+                <Button variant="default"  @click="open = true">Create Product</Button>
             </DialogTrigger>
             <DialogContent>
                 <form class="space-y-6" @submit="createProduct">
