@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Users;
 
 
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -14,33 +16,27 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::query()->get();
-        $editUser = null;
-
-        if ($request->filled('edit_user')) {
-            $editUser = User::findOrFail($request->get('edit_user'));
-        }
-
-        return inertia('Users/Index', [
-            'users' => $users,
-            'editUser' => $editUser,
+        return  Inertia::render("Users/Index", [
+            "users"=> User::all()
         ]);
     }
 
-//    /**
-//     * Show the form for creating a new resource.
-//     */
-//    public function create()
-//    {
-//        //
-//    }
+   /**
+    * Show the form for creating a new resource.
+    */
+   public function create()
+   {
+    return Inertia::render("Users/Create");
+   }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $user = User::create($request->validated());
+        return to_route('users.index')
+            ->withSuccess('User created successfully!');
     }
 
 //    /**

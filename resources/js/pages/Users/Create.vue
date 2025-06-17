@@ -1,26 +1,24 @@
 <script setup lang="ts">
-import CreateProduct from '@/components/CreateProduct.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head,usePage} from '@inertiajs/vue3';
+import { Head} from '@inertiajs/vue3';
+import UsersCreate from '@/components/UsersCreate.vue';
+
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Products',
-        href: '/products',
+        title: 'Users',
+        href: '/users',
     },
 ];
 
-const {flash} = usePage().props;
-console.log(flash);
 
 </script>
 
 <template>
-
-    <Head title="Products" />
-
+    <Head title="Users" />
     <AppLayout :breadcrumbs="breadcrumbs">
-        <CreateProduct />
+        <UsersCreate/>
     </AppLayout>
 </template>

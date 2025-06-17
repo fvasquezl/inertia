@@ -1,93 +1,55 @@
 <template>
-    <div class="px-4 sm:px-6 lg:px-8">
-        <div class="sm:flex sm:items-center">
-            <div class="sm:flex-auto">
-                <h1 class="text-base font-semibold text-gray-900">Users</h1>
-                <p class="mt-2 text-sm text-gray-700">A list of all the users in your account including their name,
-                    title, email and role.</p>
-            </div>
-            <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                <button type="button"
-                    class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add
-                    user</button>
-            </div>
-        </div>
-        <div class="mt-8 flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <table class="min-w-full divide-y divide-gray-300">
-                        <thead>
-                            <tr>
-                                <th scope="col"
-                                    class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                    <a href="#" class="group inline-flex">
-                                        Name
-                                        <span
-                                            class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
-                                            <ChevronDownIcon class="size-5" aria-hidden="true" />
-                                        </span>
-                                    </a>
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    <a href="#" class="group inline-flex">
-                                        Title
-                                        <span
-                                            class="ml-2 flex-none rounded-sm bg-gray-100 text-gray-900 group-hover:bg-gray-200">
-                                            <ChevronDownIcon class="size-5" aria-hidden="true" />
-                                        </span>
-                                    </a>
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    <a href="#" class="group inline-flex">
-                                        Email
-                                        <span
-                                            class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
-                                            <ChevronDownIcon
-                                                class="invisible ml-2 size-5 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible"
-                                                aria-hidden="true" />
-                                        </span>
-                                    </a>
-                                </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                    <a href="#" class="group inline-flex">
-                                        Role
-                                        <span
-                                            class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
-                                            <ChevronDownIcon
-                                                class="invisible ml-2 size-5 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible"
-                                                aria-hidden="true" />
-                                        </span>
-                                    </a>
-                                </th>
-                                <th scope="col" class="relative py-3.5 pr-0 pl-3">
-                                    <span class="sr-only">Edit</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
-                            <tr v-for="person in people" :key="person.email">
-                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                    {{ person.name }}</td>
-                                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.title }}</td>
-                                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.email }}</td>
-                                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.role }}</td>
-                                <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span
-                                            class="sr-only">, {{ person.name }}</span></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Email
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Role
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="person in people" :key="person.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                <th scope="row" class="px-8 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{ person.name }}
+                </th>
+                <td class="px-6 py-4">
+                    {{ person.email }}
+                </td>
+                <td class="px-6 py-4">
+                   {{ person.role }}
+                </td>
+                <td class="px-6 py-4">
+                   <a href="#" class="mr-2 px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</a>
+                    <button type="button" class="px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                                
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 </template>
 
 <script setup>
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 
-const people = [
-    { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-]
+import { defineProps } from 'vue';
+
+defineProps({
+    people: {
+        type: Array,
+        required: true,
+        default: () => []
+    }
+});
+
 </script>
