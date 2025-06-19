@@ -15,7 +15,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::query()->get();
+        $products = Product::query()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+            
         return Inertia::render('products/Index', [
             'products' => $products
         ]);
@@ -60,7 +64,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->validated());
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     /**
@@ -68,6 +74,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }
 }

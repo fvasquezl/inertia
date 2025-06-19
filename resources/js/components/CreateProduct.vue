@@ -17,11 +17,11 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 const emit = defineEmits(['product-created']);
 
 const form = useForm({
-    password: '',
     name: '',
     description: '',
     price: '',
@@ -66,7 +66,7 @@ const closeModal = () => {
             <DialogContent>
                 <form class="space-y-6" @submit="createProduct">
                     <DialogHeader class="space-y-3">
-                        <DialogTitle>CreateProduct</DialogTitle>
+                        <DialogTitle>Create Product</DialogTitle>
                         <DialogDescription>
                             Form to create a new product. Please fill in the details below.
                         </DialogDescription>
@@ -79,13 +79,13 @@ const closeModal = () => {
                     </div>
                     <div class="grid gap-2">
                         <Label for="description">Description</Label>
-                        <Input id="description" type="text" name="description" v-model="form.description"
+                        <Textarea id="description" name="description" v-model="form.description"
                             placeholder="Product description" />
                         <InputError :message="form.errors.description" />
                     </div>
                     <div class="grid gap-2">
                         <Label for="price">Price</Label>
-                        <Input id="price" type="text" name="price" v-model="form.price" placeholder="Product price" />
+                        <Input id="price" type="number" step="0.01" min="0" name="price" v-model="form.price" placeholder="0.00" />
                         <InputError :message="form.errors.price" />
                     </div>
 
@@ -94,7 +94,7 @@ const closeModal = () => {
                             <Button variant="secondary" @click="closeModal"> Cancel </Button>
                         </DialogClose>
 
-                        <Button type="submit" variant="default" :disabled="form.processing"> Crate Product
+                        <Button type="submit" variant="default" :disabled="form.processing"> Create Product
                         </Button>
                     </DialogFooter>
                 </form>

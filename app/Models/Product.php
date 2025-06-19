@@ -13,11 +13,6 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'float',
     ];
-
-    public function getPriceAttribute($value)
-    {
-        return number_format($value, 2);
-    }
 }
