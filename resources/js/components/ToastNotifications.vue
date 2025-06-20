@@ -22,24 +22,19 @@ const colors = {
 
 <template>
     <div class="fixed top-4 right-4 z-50 space-y-2">
-        <TransitionGroup name="toast" tag="div">
-            <div
-                v-for="toast in toasts"
-                :key="toast.id"
-                :class="[
+        <TransitionGroup name="toast" tag="div" v-bind="$attrs">
+            <template v-for="toast in toasts" :key="toast.id">
+                <div :class="[
                     'flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg min-w-[300px] max-w-md',
                     colors[toast.type]
-                ]"
-            >
-                <component :is="icons[toast.type]" class="h-5 w-5 flex-shrink-0" />
-                <p class="flex-1 text-sm font-medium">{{ toast.message }}</p>
-                <button
-                    @click="remove(toast.id)"
-                    class="flex-shrink-0 ml-2 hover:opacity-70 transition-opacity"
-                >
-                    <X class="h-4 w-4" />
-                </button>
-            </div>
+                ]">
+                    <component :is="icons[toast.type]" class="h-5 w-5 flex-shrink-0" />
+                    <p class="flex-1 text-sm font-medium">{{ toast.message }}</p>
+                    <button @click="remove(toast.id)" class="flex-shrink-0 ml-2 hover:opacity-70 transition-opacity">
+                        <X class="h-4 w-4" />
+                    </button>
+                </div>
+            </template>
         </TransitionGroup>
     </div>
 </template>

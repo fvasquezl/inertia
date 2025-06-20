@@ -8,6 +8,8 @@ import { useToast } from '@/composables/useToast';
 import type { Product } from '@/types/products';
 import type { PaginatedData } from '@/types/pagination';
 import { Button } from '@/components/ui/button';
+import { type BreadcrumbItem } from '@/types';
+
 import {
     Table,
     TableBody,
@@ -85,19 +87,21 @@ const deleteProduct = () => {
     });
 };
 
-const breadcrumbs = [
-    { label: 'Dashboard', href: route('dashboard') },
-    { label: 'Products' },
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Products',
+        href: '/products',
+    },
 ];
 
 const getNumericLinks = () => {
     // Filtrar solo los links numéricos y elipsis, excluyendo Previous y Next
     return props.products.links.filter(link => {
         const label = link.label;
-        return label !== '&laquo; Previous' && 
-               label !== 'Next &raquo;' &&
-               label !== 'Previous' &&
-               label !== 'Next';
+        return label !== '&laquo; Previous' &&
+            label !== 'Next &raquo;' &&
+            label !== 'Previous' &&
+            label !== 'Next';
     });
 };
 </script>
@@ -132,18 +136,10 @@ const getNumericLinks = () => {
                                 </TableCell>
                                 <TableCell class="text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            @click="editProduct(product)"
-                                        >
+                                        <Button size="sm" variant="outline" @click="editProduct(product)">
                                             <Pencil class="h-4 w-4" />
                                         </Button>
-                                        <Button
-                                            size="sm"
-                                            variant="outline"
-                                            @click="confirmDelete(product)"
-                                        >
+                                        <Button size="sm" variant="outline" @click="confirmDelete(product)">
                                             <Trash2 class="h-4 w-4" />
                                         </Button>
                                     </div>
@@ -165,58 +161,42 @@ const getNumericLinks = () => {
                     Showing {{ products.from }} to {{ products.to }} of {{ products.total }} products
                 </p>
                 <div v-if="products.last_page > 1">
-                <Pagination>
-                    <PaginationList>
-                        <PaginationListItem>
-                            <PaginationFirst 
-                                :href="products.first_page_url"
-                                :disabled="products.current_page === 1"
-                            />
-                        </PaginationListItem>
-                        <PaginationListItem>
-                            <PaginationPrev 
-                                :href="products.prev_page_url"
-                                :disabled="!products.prev_page_url"
-                            />
-                        </PaginationListItem>
-
-                        <template v-for="(link, index) in getNumericLinks()" :key="index">
+                    <Pagination>
+                        <PaginationList>
                             <PaginationListItem>
-                                <PaginationEllipsis v-if="link.label === '...'" />
-                                <PaginationLink
-                                    v-else
-                                    :href="link.url"
-                                    :is-active="link.active"
-                                    size="default"
-                                >
-                                    {{ link.label }}
-                                </PaginationLink>
+                                <PaginationFirst :href="products.first_page_url"
+                                    :disabled="products.current_page === 1" />
                             </PaginationListItem>
-                        </template>
+                            <PaginationListItem>
+                                <PaginationPrev :href="products.prev_page_url ?? undefined"
+                                    :disabled="!products.prev_page_url" />
+                            </PaginationListItem>
 
-                        <PaginationListItem>
-                            <PaginationNext 
-                                :href="products.next_page_url"
-                                :disabled="!products.next_page_url"
-                            />
-                        </PaginationListItem>
-                        <PaginationListItem>
-                            <PaginationLast 
-                                :href="products.last_page_url"
-                                :disabled="products.current_page === products.last_page"
-                            />
-                        </PaginationListItem>
-                    </PaginationList>
-                </Pagination>
+                            <template v-for="(link, index) in getNumericLinks()" :key="index">
+                                <PaginationListItem>
+                                    <PaginationEllipsis v-if="link.label === '...'" />
+                                    <PaginationLink v-else :href="link.url ?? undefined" :is-active="link.active"
+                                        size="default">
+                                        {{ link.label }}
+                                    </PaginationLink>
+                                </PaginationListItem>
+                            </template>
+
+                            <PaginationListItem>
+                                <PaginationNext :href="products.next_page_url ?? undefined"
+                                    :disabled="!products.next_page_url" />
+                            </PaginationListItem>
+                            <PaginationListItem>
+                                <PaginationLast :href="products.last_page_url"
+                                    :disabled="products.current_page === products.last_page" />
+                            </PaginationListItem>
+                        </PaginationList>
+                    </Pagination>
                 </div>
             </div>
 
             <!-- Edit Product Modal -->
-            <EditProduct
-                v-model="showEditModal"
-                :product="editingProduct"
-                @product-updated="handleProductUpdated"
-            />
+            <EditProduct v-model="showEditModal" :product="editingProduct" @product-updated="handleProductUpdated" />
 
             <!-- Delete Confirmation Dialog -->
             <AlertDialog v-model:open="showDeleteDialog">
