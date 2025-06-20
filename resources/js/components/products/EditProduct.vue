@@ -30,6 +30,7 @@ const form = useForm({
     name: '',
     description: '',
     price: '',
+    image: null as File | null,
 });
 
 const open = ref(false);
@@ -38,10 +39,10 @@ const open = ref(false);
 watch(() => props.modelValue, (newValue) => {
     open.value = newValue;
     if (newValue && props.product) {
-        // Load product data when modal opens
         form.name = props.product.name;
         form.description = props.product.description || '';
         form.price = props.product.price.toString();
+        form.image = null;
     }
 });
 
@@ -50,13 +51,32 @@ watch(open, (newValue) => {
     emit('update:modelValue', newValue);
 });
 
+const handleImageChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        form.image = target.files[0];
+    } else {
+        form.image = null;
+    }
+};
+
 const updateProduct = (e: Event) => {
     e.preventDefault();
 
     if (!props.product) return;
 
-    form.put(route('products.update', props.product.id), {
+    // Asegura que los campos requeridos estén presentes y como string
+    const payload: Record<string, any> = {
+        name: form.name ?? '',
+        description: form.description ?? '',
+        price: form.price !== undefined && form.price !== null ? form.price.toString() : '',
+        image: form.image ?? undefined,
+        _method: 'PUT',
+    };
+
+    form.transform(() => payload).submit('post', route('products.update', props.product.id), {
         preserveScroll: true,
+        forceFormData: true,
         onSuccess: () => {
             closeModal();
             emit('product-updated');
@@ -74,7 +94,7 @@ const updateProduct = (e: Event) => {
 const closeModal = () => {
     open.value = false;
     form.clearErrors();
-    form.reset();
+    // No llamar a form.reset() aquí para evitar perder los datos antes de enviar
 };
 </script>
 
@@ -102,8 +122,18 @@ const closeModal = () => {
                 </div>
                 <div class="grid gap-2">
                     <Label for="edit-price">Price</Label>
-                    <Input id="edit-price" type="number" step="0.01" min="0" name="price" v-model="form.price" placeholder="0.00" />
+                    <Input id="edit-price" type="number" step="0.01" min="0" name="price" v-model="form.price"
+                        placeholder="0.00" />
                     <InputError :message="form.errors.price" />
+                </div>
+                <div class="grid gap-2">
+                    <Label for="edit-image">Image</Label>
+                    <Input id="edit-image" type="file" name="image" accept="image/*" @change="handleImageChange" />
+                    <div v-if="props.product?.image" class="mt-2">
+                        <img :src="`/storage/${props.product.image}`" :alt="form.name"
+                            class="w-20 h-20 object-cover rounded" />
+                    </div>
+                    <InputError :message="form.errors.image" />
                 </div>
 
                 <DialogFooter class="gap-2">

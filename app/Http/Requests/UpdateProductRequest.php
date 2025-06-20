@@ -26,6 +26,7 @@ class UpdateProductRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', Rule::unique('products')->ignore($this->product)],
             'description' => ['nullable', 'string', 'max:1000'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'image' => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

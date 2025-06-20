@@ -25,14 +25,25 @@ const form = useForm({
     name: '',
     description: '',
     price: '',
+    image: null as File | null,
 });
 const open = ref(false);
+
+const handleImageChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        form.image = target.files[0];
+    } else {
+        form.image = null;
+    }
+};
 
 const createProduct = (e: Event) => {
     e.preventDefault();
 
     form.post(route('products.store'), {
         preserveScroll: true,
+        forceFormData: true,
         onSuccess: () => {
             closeModal();
             emit('product-created');
@@ -61,7 +72,7 @@ const closeModal = () => {
     <div class="space-y-6">
         <Dialog v-model:open="open">
             <DialogTrigger as-child>
-                <Button variant="default"  @click="open = true">Create Product</Button>
+                <Button variant="default" @click="open = true">Create Product</Button>
             </DialogTrigger>
             <DialogContent>
                 <form class="space-y-6" @submit="createProduct">
@@ -85,8 +96,14 @@ const closeModal = () => {
                     </div>
                     <div class="grid gap-2">
                         <Label for="price">Price</Label>
-                        <Input id="price" type="number" step="0.01" min="0" name="price" v-model="form.price" placeholder="0.00" />
+                        <Input id="price" type="number" step="0.01" min="0" name="price" v-model="form.price"
+                            placeholder="0.00" />
                         <InputError :message="form.errors.price" />
+                    </div>
+                    <div class="grid gap-2">
+                        <Label for="image">Image</Label>
+                        <Input id="image" type="file" name="image" accept="image/*" @change="handleImageChange" />
+                        <InputError :message="form.errors.image" />
                     </div>
 
                     <DialogFooter class="gap-2">
