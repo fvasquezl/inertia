@@ -19,15 +19,15 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+    DialogClose,
+} from '@/components/ui/dialog';
 import {
     Pagination,
     PaginationEllipsis,
@@ -199,21 +199,25 @@ const getNumericLinks = () => {
             <EditProduct v-model="showEditModal" :product="editingProduct" @product-updated="handleProductUpdated" />
 
             <!-- Delete Confirmation Dialog -->
-            <AlertDialog v-model:open="showDeleteDialog">
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
+            <Dialog v-model:open="showDeleteDialog" type="alert">
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
                             This action cannot be undone. This will permanently delete the product
                             <span class="font-semibold">{{ deletingProduct?.name }}</span>.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction @click="deleteProduct">Delete</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <DialogClose as-child>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <DialogClose as-child>
+                            <Button variant="destructive" @click="deleteProduct">Delete</Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     </AppLayout>
 </template>

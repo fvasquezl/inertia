@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertDialogCancel } from 'reka-ui';
+import { DialogClose } from 'reka-ui';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 
@@ -15,10 +15,9 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <AlertDialogCancel 
-        :class="cn(buttonVariants({ variant: 'outline' }), props.class)"
-        :as-child="props.asChild"
-    >
-        <slot />
-    </AlertDialogCancel>
+    <DialogClose :as-child="props.asChild">
+        <button :class="cn(buttonVariants({ variant: 'destructive' }), props.class)">
+            <slot />
+        </button>
+    </DialogClose>
 </template>
